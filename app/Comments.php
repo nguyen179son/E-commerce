@@ -3,15 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comments extends Model
 {
+    use SoftDeletes;
     protected $table = "comments";
     protected $user_id;
     protected $video_id;
     protected $content;
     protected  $primaryKey = 'comment_id';
     protected $fillable = ['user_id','video_id','content'];
+
+    protected $dates = ['deleted_at'];
     /**
      * @return mixed
      */

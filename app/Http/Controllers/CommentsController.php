@@ -37,9 +37,10 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
+        $data = json_decode($request->input('data'));
         $comment = Comments::create(['user_id' => $request->input('user_id'),
             'video_id' => $request->input('user_id'),
-            'content' => $request->input('content')]);
+            'content' => $request->input($data->content)]);
 
         return json_encode(array('success' => true, 'comment_id' => $comment->comment_id));
     }
@@ -101,7 +102,7 @@ class CommentsController extends Controller
     public function destroy(Request $request, $id)
     {
         $comment = Comments::find($id);
-        if (!$comment->isEmpty()) {
+        if ($comment) {
             if ($comment->user_id != $request->input('user_id')) {
                 return json_encode(array('success' => false, 'message' => 'You do not have the permission to delete this comment'));
             }
