@@ -37,10 +37,10 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = json_decode($request->input('data'));
+        $data = $request->input('data');
         $comment = Comments::create(['user_id' => $request->input('user_id'),
             'video_id' => $request->input('user_id'),
-            'content' => $request->input($data->content)]);
+            'content' => $data['content']]);
 
         return json_encode(array('success' => true, 'comment_id' => $comment->comment_id));
     }
@@ -83,8 +83,8 @@ class CommentsController extends Controller
             return json_encode(array('success' => false, 'message' => 'Comment not found'));
         }
         if ($comment->user_id == $request->input('user_id')) {
-            $data = json_decode($request->input('data'));
-            $newContent = $data->content;
+            $data = $request->input('data');
+            $newContent = $data['content'];
             DB::table('comments')
                 ->where('comment_id', $id)
                 ->update(['content' => $newContent]);
