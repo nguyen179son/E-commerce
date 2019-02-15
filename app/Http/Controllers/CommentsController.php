@@ -79,7 +79,7 @@ class CommentsController extends Controller
     public function update(Request $request, $id)
     {
         $comment = Comments::find($id);
-        if ($comment->isEmpty()) {
+        if (!$comment) {
             return json_encode(array('success' => false, 'message' => 'Comment not found'));
         }
         if ($comment->user_id == $request->input('user_id')) {
@@ -90,7 +90,7 @@ class CommentsController extends Controller
                 ->update(['content' => $newContent]);
             return json_encode(array('success' => true));
         }
-        return json_encode(array('success' => false, 'message' => 'You can not edit this comment'));
+        return json_encode(array('success' => false, 'message' => 'You do not have the permission to edit this comment'));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Likes extends Model
 {
@@ -12,14 +13,15 @@ class Likes extends Model
     protected $user_id;
     protected $video_id;
     protected $primaryKey = "likes_id";
-    protected $fillable = ['user_id','video_id'];
+    protected $fillable = ['user_id', 'video_id'];
 
     protected $dates = ['deleted_at'];
+
     /**
      * @return mixed
      */
     public function getUserId()
-        {
+    {
         return $this->user_id;
     }
 
@@ -47,9 +49,11 @@ class Likes extends Model
         $this->video_id = $video_id;
     }
 
-    public static function check_exist($user_id,$video_id) {
-        if (DB::table('likes')->where('user_id',$user_id)->where('video_id',$video_id))
-            return true;
-        return false;
+    public static function check_exist($user_id, $video_id)
+    {
+        $likes = Likes::where('user_id', $user_id)->where('video_id', $video_id)->first();
+        if (!$likes)
+            return false;
+        return true;
     }
 }

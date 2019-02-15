@@ -37,7 +37,7 @@ class LikesController extends Controller
     public function store(Request $request)
     {
         if (Likes::check_exist($request->input('user_id'), $request->input('video_id'))) {
-            return json_encode(array('success' => false, 'message' => 'you liked this video'));
+            return json_encode(array('success' => false, 'message' => 'You liked this video'));
         }
         $like = Likes::create(['user_id' => $request->input('user_id'),
             'video_id' => $request->input('user_id')]);
@@ -89,13 +89,12 @@ class LikesController extends Controller
      */
     public function destroy(Request $request)
     {
-        $like = Likes::all()
-            ->where('user_id', $request->input('user_id'))
-            ->where('video_id', $request->input('video_id'));
-        if (!$like->isEmpty()) {
-            $like->delete();
-            return json_encode(array('success' => true));
+        $like = Likes::where('user_id', $request->input('user_id'))
+            ->where('video_id', $request->input('video_id'))->first();
+        if (!$like) {
+            return json_encode(array('success' => false, 'message' => 'Content not found'));
         }
-        return json_encode(array('success' => false, 'message' => 'Content not found'));
+        $like->delete();
+        return json_encode(array('success' => true));
     }
 }
