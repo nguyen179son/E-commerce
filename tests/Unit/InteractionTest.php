@@ -37,7 +37,7 @@ class InteractionTest extends TestCase
             'data' => array('content'=>'12412312'),
         ];
         $response = $this->post('/comment', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":true",$response->getContent());
+        $this->assertEquals(200,$response->getStatusCode());
     }
 
     public function testDeleteCommentsWithCorrectIdAndUserId()
@@ -46,7 +46,7 @@ class InteractionTest extends TestCase
             'user_id' => 1,
         ];
         $response = $this->delete('/comment/12', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":true",$response->getContent());
+        $this->assertEquals(200,$response->getStatusCode());
     }
 
     public function testDeleteCommentsWithWrongId()
@@ -55,7 +55,7 @@ class InteractionTest extends TestCase
             'user_id' => 1,
         ];
         $response = $this->delete('/comment/abc', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":false,\"message\":\"Comment not found\"",$response->getContent());
+        $this->assertEquals(412,$response->getStatusCode());
     }
 
     public function testDeleteCommentsWithCorrectIdWrongUserId()
@@ -64,17 +64,27 @@ class InteractionTest extends TestCase
             'user_id' => 1231312,
         ];
         $response = $this->delete('/comment/11', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":false,\"message\":\"You do not have the permission to delete this comment\"",$response->getContent());
+        $this->assertEquals(403,$response->getStatusCode());
     }
 
     public function testUpdateCommentsWithCorrectIdAndUserId()
     {
         $data = [
-            'user_id' => 456,
+            'user_id' => 1,
             'data' => array('content'=>'12412312'),
         ];
-        $response = $this->put('/comment/10', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":true",$response->getContent());
+        $response = $this->put('/comment/22', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
+        $this->assertEquals(200,$response->getStatusCode());
+    }
+
+    public function testUpdateCommentsWithWrongIdType()
+    {
+        $data = [
+            'user_id' => 1,
+            'data' => array('content'=>'12412312'),
+        ];
+        $response = $this->put('/comment/abc', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
+        $this->assertEquals(412,$response->getStatusCode());
     }
 
     public function testUpdateCommentsWithWrongId()
@@ -83,8 +93,8 @@ class InteractionTest extends TestCase
             'user_id' => 1,
             'data' => array('content'=>'12412312'),
         ];
-        $response = $this->put('/comment/abc', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":false,\"message\":\"Comment not found\"",$response->getContent());
+        $response = $this->put('/comment/121212', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
+        $this->assertEquals(404,$response->getStatusCode());
     }
 
     public function testUpdateCommentsWithCorrectIdAndWrongUserId()
@@ -94,7 +104,7 @@ class InteractionTest extends TestCase
             'data' => array('content'=>'12412312'),
         ];
         $response = $this->put('/comment/10', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":false,\"message\":\"You do not have the permission to edit this comment\"",$response->getContent());
+        $this->assertEquals(403,$response->getStatusCode());
     }
 
     public function testGetListCommentsWithCorrectId()
@@ -102,8 +112,8 @@ class InteractionTest extends TestCase
         $data = [
             'video_id' => 1,
         ];
-        $response = $this->get('/comment/list', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":true",$response->getContent());
+        $response = $this->call('GET','/comment/list', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
+        $this->assertEquals(200,$response->getStatusCode());
     }
 
     public function testLikeVideoWithCorrectUserAndVideo()
@@ -113,7 +123,7 @@ class InteractionTest extends TestCase
             'video_id' => 111,
         ];
         $response = $this->post('/like', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":true",$response->getContent());
+        $this->assertEquals(200,$response->getStatusCode());
     }
 
     public function testLikeVideoWithExistedUserAndVideo()
@@ -123,7 +133,7 @@ class InteractionTest extends TestCase
             'video_id' => 1,
         ];
         $response = $this->post('/like', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":false,\"message\":\"You liked this video\"",$response->getContent());
+        $this->assertEquals(412,$response->getStatusCode());
     }
 
     public function testUnlikeVideoWithCorrectUserAndVideo()
@@ -133,7 +143,7 @@ class InteractionTest extends TestCase
             'video_id' => 1,
         ];
         $response = $this->post('/unlike', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":true",$response->getContent());
+        $this->assertEquals(200,$response->getStatusCode());
     }
 
     public function testUnlikeVideoWithWrongUserAndVideo()
@@ -143,7 +153,7 @@ class InteractionTest extends TestCase
             'video_id' => 111,
         ];
         $response = $this->post('/unlike', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":false,\"message\":\"Content not found\"",$response->getContent());
+        $this->assertEquals(404,$response->getStatusCode());
     }
 
 
@@ -152,7 +162,7 @@ class InteractionTest extends TestCase
         $data = [
             'video_id' => 1,
         ];
-        $response = $this->get('/like/list', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertContains("\"success\":true",$response->getContent());
+        $response = $this->call('GET','/like/list', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
+        $this->assertEquals(200,$response->getStatusCode());
     }
 }

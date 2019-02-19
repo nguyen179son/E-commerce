@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Likes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Validator;
 class LikesController extends Controller
 {
     /**
@@ -36,13 +36,25 @@ class LikesController extends Controller
      */
     public function store(Request $request)
     {
+        $parameters = array('user_id' => $request->input('user_id'),
+            'video_id' => $request->input('video_id'),
+        );
+        $validation = Validator::make($parameters, [
+            'user_id' => 'required|integer',
+            'video_id' => 'required|integer',
+        ]);
+        if ($validation->fails()) {
+            return abort(412,'Precondition Failed');
+        }
         if (Likes::check_exist($request->input('user_id'), $request->input('video_id'))) {
-            return json_encode(array('success' => false, 'message' => 'You liked this video'));
+            return abort(412,'Precondition Failed');
         }
         $like = Likes::create(['user_id' => $request->input('user_id'),
             'video_id' => $request->input('user_id')]);
-
-        return json_encode(array('success' => true, 'like_id' => $like->likes_id));
+        return response()->json([
+            'success' => true,
+            'like_id' => $like->likes_id
+        ],200);
     }
 
     /**
@@ -53,9 +65,19 @@ class LikesController extends Controller
      */
     public function show(Request $request)
     {
+        $parameters = array('video_id' => $request->video_id);
+        $validation = Validator::make($parameters, [
+            'video_id' => 'required|integer',
+        ]);
+        if ($validation->fails()) {
+            return abort(412,'Precondition Failed');
+        }
         $video_id = $request->input('video_id');
         $likes = Likes::all()->where('video_id', '=', $video_id);
-        return json_encode(array('success' => true, 'likes' => $likes));
+        return response()->json([
+            'success' => true,
+            'likes' => $likes
+        ],200);
     }
 
     /**
@@ -86,15 +108,28 @@ class LikesController extends Controller
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy(Request $request)
     {
+        $parameters = array('user_id' => $request->input('user_id'),
+            'video_id' => $request->input('video_id'),
+        );
+        $validation = Validator::make($parameters, [
+            'user_id' => 'required|integer',
+            'video_id' => 'required|integer',
+        ]);
+        if ($validation->fails()) {
+            return abort(412,'Precondition Failed');
+        }
         $like = Likes::where('user_id', $request->input('user_id'))
             ->where('video_id', $request->input('video_id'))->first();
         if (!$like) {
-            return json_encode(array('success' => false, 'message' => 'Content not found'));
+            return abort(404, 'Resource Not Found');
         }
         $like->delete();
-        return json_encode(array('success' => true));
+        return response()->json([
+            'success' => true
+        ],200);
     }
 }
