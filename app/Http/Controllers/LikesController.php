@@ -44,10 +44,10 @@ class LikesController extends Controller
             'video_id' => 'required|integer',
         ]);
         if ($validation->fails()) {
-            return abort(412,'Precondition Failed');
+            return abort(412,'Validation Failed');
         }
         if (Likes::check_exist($request->input('user_id'), $request->input('video_id'))) {
-            return abort(412,'Precondition Failed');
+            return abort(412,'Validation Failed');
         }
         $like = Likes::create(['user_id' => $request->input('user_id'),
             'video_id' => $request->input('user_id')]);
@@ -70,7 +70,7 @@ class LikesController extends Controller
             'video_id' => 'required|integer',
         ]);
         if ($validation->fails()) {
-            return abort(412,'Precondition Failed');
+            return abort(412,'Validation Failed');
         }
         $video_id = $request->input('video_id');
         $likes = Likes::all()->where('video_id', '=', $video_id);
@@ -120,7 +120,7 @@ class LikesController extends Controller
             'video_id' => 'required|integer',
         ]);
         if ($validation->fails()) {
-            return abort(412,'Precondition Failed');
+            return abort(412,'Validation Failed');
         }
         $like = Likes::where('user_id', $request->input('user_id'))
             ->where('video_id', $request->input('video_id'))->first();

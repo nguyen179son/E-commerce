@@ -46,7 +46,7 @@ class CommentsController extends Controller
             'video_id' => 'required|integer',
         ]);
         if ($validation->fails()) {
-            return abort(412,'Precondition Failed');
+            return abort(412,'Validation Failed');
         }
         $data = $request->input('data');
         $comment = Comments::create(['user_id' => $request->input('user_id'),
@@ -71,7 +71,7 @@ class CommentsController extends Controller
             'video_id' => 'required|integer'
         ]);
         if ($validation->fails()) {
-            return abort(412,'Precondition Failed');
+            return abort(412,'Validation Failed');
         }
         $video_id = $request->input('video_id');
         $comments = Comments::all()->where('video_id', '=', $video_id);
@@ -108,7 +108,7 @@ class CommentsController extends Controller
             'comment_id' => 'required|integer'
         ]);
         if ($validation->fails()) {
-            return abort(412,'Precondition Failed');
+            return abort(412,'Validation Failed');
         }
         $comment = Comments::find($id);
         if (!$comment) {
@@ -143,7 +143,7 @@ class CommentsController extends Controller
             'comment_id' => 'required|integer'
         ]);
         if ($validation->fails()) {
-            return abort(412,'Precondition Failed');
+            return abort(412,'Validation Failed');
         }
         $comment = Comments::find($id);
         if ($comment) {
