@@ -55,7 +55,7 @@ class InteractionTest extends TestCase
             'user_id' => 1,
         ];
         $response = $this->delete('/comment/abc', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertEquals(412,$response->getStatusCode());
+        $this->assertEquals(400,$response->getStatusCode());
     }
 
     public function testDeleteCommentsWithCorrectIdWrongUserId()
@@ -84,7 +84,7 @@ class InteractionTest extends TestCase
             'data' => array('content'=>'12412312'),
         ];
         $response = $this->put('/comment/abc', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertEquals(412,$response->getStatusCode());
+        $this->assertEquals(400,$response->getStatusCode());
     }
 
     public function testUpdateCommentsWithWrongId()
@@ -133,7 +133,7 @@ class InteractionTest extends TestCase
             'video_id' => 1,
         ];
         $response = $this->post('/like', $data,array('HTTP_CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'));
-        $this->assertEquals(412,$response->getStatusCode());
+        $this->assertEquals(400,$response->getStatusCode());
     }
 
     public function testUnlikeVideoWithCorrectUserAndVideo()
