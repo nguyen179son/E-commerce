@@ -50,7 +50,7 @@ class CommentsController extends Controller
         }
         $data = $request->input('data');
         $comment = Comments::create(['user_id' => $request->input('user_id'),
-            'video_id' => $request->input('user_id'),
+            'video_id' => $request->input('video_id'),
             'content' => $data['content']]);
         return response()->json([
             'success' => true,

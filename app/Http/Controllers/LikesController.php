@@ -36,7 +36,8 @@ class LikesController extends Controller
      */
     public function store(Request $request)
     {
-        $parameters = array('user_id' => $request->input('user_id'),
+        $parameters = array(
+            'user_id' => $request->input('user_id'),
             'video_id' => $request->input('video_id'),
         );
         $validation = Validator::make($parameters, [
@@ -50,7 +51,7 @@ class LikesController extends Controller
             return abort(400,'Bad Request');
         }
         $like = Likes::create(['user_id' => $request->input('user_id'),
-            'video_id' => $request->input('user_id')]);
+            'video_id' => $request->input('video_id')]);
         return response()->json([
             'success' => true,
             'like_id' => $like->likes_id
