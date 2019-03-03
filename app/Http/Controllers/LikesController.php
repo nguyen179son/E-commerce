@@ -74,10 +74,15 @@ class LikesController extends Controller
             return abort(400,'Bad Request');
         }
         $video_id = $request->input('video_id');
-        $likes = Likes::all()->where('video_id', '=', $video_id);
+//        $likes = Likes::all()->where('video_id', '=', $video_id);
+        $likes = \DB::table('likes')->where('video_id','=',$video_id)->get();
+        $return_array=[];
+        foreach ($likes as $like) {
+            array_push($return_array,(array)$like);
+        }
         return response()->json([
             'success' => true,
-            'likes' => $likes
+            'likes' => $return_array
         ],200);
     }
 
