@@ -55,7 +55,7 @@ class LikesController extends Controller
             'video_id' => $request->input('video_id')]);
         return response()->json([
             'success' => true,
-            'like_id' => $like->likes_id
+            'like_id' => $like->like_id
         ], 200);
     }
 
