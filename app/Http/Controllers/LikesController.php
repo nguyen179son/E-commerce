@@ -85,8 +85,7 @@ class LikesController extends Controller
             array_push($return_array,['video_id'=>$video_id,'likes'=>$likes_array]);
         }
         return response()->json([
-            'success' => true,
-            'likes' => $return_array
+            $return_array
         ],200);
     }
 

@@ -86,8 +86,7 @@ class CommentsController extends Controller
             array_push($return_array,['video_id'=>$video_id,'comments'=>$comments_array]);
         }
         return response()->json([
-            'success' => true,
-            'comments' => $return_array
+            $return_array
         ], 200);
     }
 
