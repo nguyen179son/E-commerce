@@ -79,7 +79,7 @@ class CommentsController extends Controller
         $return_array = [];
         foreach ($videos as $video_id) {
             $comments = \DB::table('comments')->where('video_id', '=', $video_id)
-                ->whereNull('delete_at')->get();
+                ->whereNull('deleted_at')->get();
             $comments_array = [];
             foreach ($comments as $comment) {
                 array_push($comments_array, (array)$comment);

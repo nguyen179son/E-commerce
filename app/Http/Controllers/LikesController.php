@@ -77,7 +77,7 @@ class LikesController extends Controller
         $videos = $request->input('video_ids');
         $return_array = [];
         foreach ($videos as $video_id) {
-            $likes = \DB::table('likes')->where('video_id', '=', $video_id)->whereNull('delete_at')->get();
+            $likes = \DB::table('likes')->where('video_id', '=', $video_id)->whereNull('deleted_at')->get();
             $likes_array = [];
             foreach ($likes as $like) {
                 array_push($likes_array, (array)$like);
