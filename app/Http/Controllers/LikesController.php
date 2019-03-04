@@ -69,7 +69,8 @@ class LikesController extends Controller
     {
         $parameters = array('video_ids' => $request->input('video_ids'));
         $validation = Validator::make($parameters, [
-            'video_ids' => 'required|numericArray',
+            'video_ids' => 'required|array',
+            'video_ids.*' => 'integer'
         ]);
         if ($validation->fails()) {
             return abort(400, 'Bad Request');
