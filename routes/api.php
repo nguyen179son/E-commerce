@@ -20,9 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/comment','CommentsController@store');
 Route::delete('/comment/{id}','CommentsController@destroy');
 Route::put('/comment/{id}','CommentsController@update');
-Route::get('/comment/list','CommentsController@show');
+Route::get('/comments','CommentsController@show');
 
 
 Route::post('/like','LikesController@store');
 Route::post('/unlike','LikesController@destroy');
-Route::get('/like/list','LikesController@show');
+Route::get('/likes','LikesController@show');

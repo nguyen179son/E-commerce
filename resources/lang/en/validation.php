@@ -87,6 +87,7 @@ return [
     'unique'               => 'The :attribute has already been taken.',
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
+    'numericArray' => 'The :attribute must be an array of integers',
 
     /*
     |--------------------------------------------------------------------------
@@ -102,6 +103,7 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+            'numericArray' => 'The :attribute must be an array of integers'
         ],
     ],
 

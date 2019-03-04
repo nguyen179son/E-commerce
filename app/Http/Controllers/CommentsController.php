@@ -46,7 +46,7 @@ class CommentsController extends Controller
             'video_id' => 'required|integer',
         ]);
         if ($validation->fails()) {
-            return abort(400,'Bad Request');
+            return abort(400, 'Bad Request');
         }
         $data = $request->input('data');
         $comment = Comments::create(['user_id' => $request->input('user_id'),
@@ -66,22 +66,28 @@ class CommentsController extends Controller
      */
     public function show(Request $request)
     {
-        $parameters = array('video_id' => $request->input('video_id'));
+        $parameters = array('video_ids' => $request->input('video_ids'));
         $validation = Validator::make($parameters, [
-            'video_id' => 'required|integer'
+            'video_ids' => 'required|array',
+            'video_ids.*' => 'integer'
         ]);
         if ($validation->fails()) {
-            return abort(400,'Bad Request');
+            return abort(400, 'Bad Request');
         }
-        $video_id = $request->input('video_id');
-        $comments = \DB::table('comments')->where('video_id', '=', $video_id)->get();
-        $return_array=[];
-        foreach ($comments as $comment) {
-            array_push($return_array,(array)$comment);
+        $videos = $request->input('video_ids');
+        $videos = array_unique($videos);
+        $return_array = [];
+        foreach ($videos as $video_id) {
+            $comments = \DB::table('comments')->where('video_id', '=', $video_id)->get();
+            $comments_array = [];
+            foreach ($comments as $comment) {
+                array_push($comments_array, (array)$comment);
+            }
+            array_push($return_array,['video_id'=>$video_id,'comments'=>$comments_array]);
         }
         return response()->json([
             'success' => true,
-            'comment' => $return_array
+            'comments' => $return_array
         ], 200);
     }
 
@@ -112,7 +118,7 @@ class CommentsController extends Controller
             'comment_id' => 'required|integer'
         ]);
         if ($validation->fails()) {
-            return abort(400,'Bad Request');
+            return abort(400, 'Bad Request');
         }
         $comment = Comments::find($id);
         if (!$comment) {
@@ -147,7 +153,7 @@ class CommentsController extends Controller
             'comment_id' => 'required|integer'
         ]);
         if ($validation->fails()) {
-            return abort(400,'Bad Request');
+            return abort(400, 'Bad Request');
         }
         $comment = Comments::find($id);
         if ($comment) {
