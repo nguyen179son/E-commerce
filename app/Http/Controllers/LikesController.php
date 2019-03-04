@@ -6,6 +6,7 @@ use App\Likes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
+
 class LikesController extends Controller
 {
     /**
@@ -45,17 +46,17 @@ class LikesController extends Controller
             'video_id' => 'required|integer',
         ]);
         if ($validation->fails()) {
-            return abort(400,'Bad Request');
+            return abort(400, 'Bad Request');
         }
         if (Likes::check_exist($request->input('user_id'), $request->input('video_id'))) {
-            return abort(409,'Conflict');
+            return abort(409, 'Conflict');
         }
         $like = Likes::create(['user_id' => $request->input('user_id'),
             'video_id' => $request->input('video_id')]);
         return response()->json([
             'success' => true,
             'like_id' => $like->likes_id
-        ],200);
+        ], 200);
     }
 
     /**
@@ -82,11 +83,11 @@ class LikesController extends Controller
             foreach ($likes as $like) {
                 array_push($likes_array, (array)$like);
             }
-            array_push($return_array,['video_id'=>$video_id,'likes'=>$likes_array]);
+            array_push($return_array, ['video_id' => $video_id, 'likes' => $likes_array]);
         }
-        return response()->json([
+        return response()->json(
             $return_array
-        ],200);
+            , 200);
     }
 
     /**
@@ -129,7 +130,7 @@ class LikesController extends Controller
             'video_id' => 'required|integer',
         ]);
         if ($validation->fails()) {
-            return abort(400,'Bad Request');
+            return abort(400, 'Bad Request');
         }
         $like = Likes::where('user_id', $request->input('user_id'))
             ->where('video_id', $request->input('video_id'))->first();
@@ -139,6 +140,6 @@ class LikesController extends Controller
         $like->delete();
         return response()->json([
             'success' => true
-        ],200);
+        ], 200);
     }
 }

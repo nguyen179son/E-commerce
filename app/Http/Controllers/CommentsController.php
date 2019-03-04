@@ -84,11 +84,11 @@ class CommentsController extends Controller
             foreach ($comments as $comment) {
                 array_push($comments_array, (array)$comment);
             }
-            array_push($return_array,['video_id'=>$video_id,'comments'=>$comments_array]);
+            array_push($return_array, ['video_id' => $video_id, 'comments' => $comments_array]);
         }
-        return response()->json([
+        return response()->json(
             $return_array
-        ], 200);
+            , 200);
     }
 
     /**

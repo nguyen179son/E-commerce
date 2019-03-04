@@ -12,7 +12,7 @@ class Likes extends Model
     protected $table = "likes";
     protected $user_id;
     protected $video_id;
-    protected $primaryKey = "likes_id";
+    protected $primaryKey = "like_id";
     protected $fillable = ['user_id', 'video_id'];
 
     protected $dates = ['deleted_at'];
