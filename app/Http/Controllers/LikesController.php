@@ -75,8 +75,7 @@ class LikesController extends Controller
         if ($validation->fails()) {
             return abort(400, 'Bad Request');
         }
-        $video_id = $request->input('video_id');
-        $videos = $request->input('video_ids');
+        $videos = $request->query('video_ids');
         $videos = array_unique($videos);
             $return_array = [];
         foreach ($videos as $video_id) {

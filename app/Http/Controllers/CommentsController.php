@@ -66,15 +66,16 @@ class CommentsController extends Controller
      */
     public function show(Request $request)
     {
-        $parameters = array('video_ids' => $request->query('video_ids'));
-        $validation = Validator::make($parameters, [
+	
+        $parameters = array('video_ids' => $request->query('video_ids'));        
+	$validation = Validator::make($parameters, [
             'video_ids' => 'required|array',
             'video_ids.*' => 'integer'
         ]);
         if ($validation->fails()) {
             return abort(400, 'Bad Request');
         }
-        $videos = $request->input('video_ids');
+        $videos = $request->query('video_ids');
         $videos = array_unique($videos);
         $return_array = [];
         foreach ($videos as $video_id) {
