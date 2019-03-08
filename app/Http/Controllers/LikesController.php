@@ -67,7 +67,7 @@ class LikesController extends Controller
      */
     public function show(Request $request)
     {
-        $parameters = array('video_ids' => $request->input('video_ids'));
+        $parameters = array('video_ids' => $request->query('video_ids'));
         $validation = Validator::make($parameters, [
             'video_ids' => 'required|array',
             'video_ids.*' => 'integer'
