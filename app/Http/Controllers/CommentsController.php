@@ -68,7 +68,7 @@ class CommentsController extends Controller
     {
 	
         $parameters = array('video_ids' => $request->query('video_ids'));        
-	$validation = Validator::make($parameters, [
+	    $validation = Validator::make($parameters, [
             'video_ids' => 'required|array',
             'video_ids.*' => 'integer'
         ]);
@@ -80,7 +80,7 @@ class CommentsController extends Controller
         $return_array = [];
         foreach ($videos as $video_id) {
             $comments = \DB::table('comments')->where('video_id', '=', $video_id)
-                ->whereNull('deleted_at')->get();
+                ->whereNull('deleted_at')->orderBy('created_at','DESC')->get();
             $comments_array = [];
             foreach ($comments as $comment) {
                 array_push($comments_array, (array)$comment);
